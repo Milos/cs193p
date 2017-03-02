@@ -69,9 +69,9 @@ struct CalculatorBrain {
         }
       case .binarryOperation(let function):
         print("accumulator:  \(accumulator)")
-        if accumulator != nil { //checks if there are operands to work with
-          description += symbol
+        if accumulator != nil { //checks if there are operands to work with          
           performPendingBinaryOperation()
+          description += symbol
           pendingBinaryOperation = PendingBinaryOperation(function: function, firstOperand: accumulator!, mathematicalSymbol: symbol)
           accumulator = nil
         }
@@ -143,9 +143,13 @@ struct CalculatorBrain {
   // format and round number
   func formatDisplay(_ number: Double) -> String{
     let formatter = NumberFormatter()
-    formatter.roundingMode = NumberFormatter.RoundingMode.down
     formatter.maximumFractionDigits = 6
-    return formatter.string(from: NSNumber(value: number)) ?? ""
+    var numberString = formatter.string(from: NSNumber(value: number)) ?? ""
+    // add 0 at the begining
+    if (numberString.characters.first == ".") {
+      numberString.insert("0", at: numberString.startIndex)
+    }
+    return numberString
   }
   
 }
