@@ -35,7 +35,7 @@ struct CalculatorBrain {
     "÷" : Operation.binarryOperation({ $0 / $1 }),
     "+" : Operation.binarryOperation({ $0 + $1 }),
     "−" : Operation.binarryOperation({ $0 - $1 }),
-    "%" : Operation.binarryOperation({ $0.truncatingRemainder(dividingBy: $1) }),
+    "mod" : Operation.binarryOperation({ $0.truncatingRemainder(dividingBy: $1) }),
     "=" : Operation.equals,
     "C" : Operation.clear,
     "Rand": Operation.random
@@ -45,7 +45,7 @@ struct CalculatorBrain {
     if let operation = operations[symbol] {
       switch operation {
       case .constant(let value):
-        // prevents copying the same symbol in the description one after another
+        // prevents copying the same constant symbol in the description one after another
         if (String(description.characters.last!) != symbol) {
           description += symbol
           pendingDescription = true
@@ -69,7 +69,8 @@ struct CalculatorBrain {
         }
       case .binarryOperation(let function):
         print("accumulator:  \(accumulator)")
-        if accumulator != nil { //checks if there are operands to work with          
+        if accumulator != nil { //checks if there are operands to work with
+          pendingDescription = false
           performPendingBinaryOperation()
           description += symbol
           pendingBinaryOperation = PendingBinaryOperation(function: function, firstOperand: accumulator!, mathematicalSymbol: symbol)
@@ -146,7 +147,7 @@ struct CalculatorBrain {
     formatter.maximumFractionDigits = 6
     var numberString = formatter.string(from: NSNumber(value: number)) ?? ""
     // add 0 at the begining
-    if (numberString.characters.first == ".") {
+    if (numberString.characters.first == "." || numberString.characters.first == ",") {
       numberString.insert("0", at: numberString.startIndex)
     }
     return numberString
