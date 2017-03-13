@@ -35,15 +35,13 @@ class ViewController: UIViewController {
     }
   }
   
-  var displayValue: (Double?, String) {
+  var displayValue: Double {
     get {
-      return (Double(display.text!)!, history.text!)
+      return Double(display.text!)!
     }
     set {
-      if let number = newValue.0 {
-        display.text = brain.formatDisplay(number)
-      }
-      history.text = brain.description + (brain.resultIsPending ? " ..." : " =")
+        display.text = brain.formatDisplay(newValue)
+        history.text = brain.description + (brain.resultIsPending ? " ..." : " =")
     }
   }
   
@@ -51,17 +49,21 @@ class ViewController: UIViewController {
   
   @IBAction func performOperation(_ sender: UIButton) {
     if userIsInTheMiddleOfTyping {
-      if let value = displayValue.0 {
-        brain.setOperand(value)
-      }
+      brain.setOperand(displayValue)
+      
       userIsInTheMiddleOfTyping = false
     }
     if let mathematicalSymbol = sender.currentTitle {
       brain.performOperation(mathematicalSymbol)
     }
+
+    displayValue = brain.result!
     
-    displayValue = brain.result
-    
+  }
+  @IBAction func clear(_ sender: UIButton) {
+    brain.clear()
+    display.text = "0"
+    history.text = ""
   }
   
   @IBAction func backspace() {

@@ -9,18 +9,19 @@
 import Foundation
 
 
-struct CalculatorBrain {
+struct CalculatorBrain: CustomStringConvertible {
   
-  private var accumulator: Double?
+  typealias Operand = (value: Double, text: String)
   
-  var description = " "
+  private var accumulator: Operand?
+  
+  
   
   private enum Operation {
     case constant(Double)
     case unaryOperation((Double) -> Double)
     case binarryOperation((Double, Double) -> Double)
     case equals
-    case clear
     case random
   }
   
@@ -34,53 +35,35 @@ struct CalculatorBrain {
     "×" : Operation.binarryOperation({ $0 * $1 }),
     "÷" : Operation.binarryOperation({ $0 / $1 }),
     "+" : Operation.binarryOperation({ $0 + $1 }),
-    "−" : Operation.binarryOperation({ $0 - $1 }),
+    "-" : Operation.binarryOperation({ $0 - $1 }),
     "mod" : Operation.binarryOperation({ $0.truncatingRemainder(dividingBy: $1) }),
     "=" : Operation.equals,
-    "C" : Operation.clear,
     "Rand": Operation.random
   ]
   
   mutating func performOperation(_ symbol: String) {
     if let operation = operations[symbol] {
       switch operation {
+      
       case .constant(let value):
-        // prevents copying the same constant symbol in the description one after another
-        if (String(description.characters.last!) != symbol) {
-          description += symbol
-          pendingDescription = true
-          accumulator = value
-        }
+        accumulator = (value, "\(symbol)")
         
       case .unaryOperation(let function):
         if accumulator != nil {
-          if (symbol == "x²") {
-            description = "(\(description))²"
-          } else {
-            if (pendingBinaryOperation != nil) {
-              
-              description += symbol + "(\(formatDisplay(accumulator!)))"
-              pendingDescription = true
-            }else {
-              description = symbol + "(\(description))"
-            }
-          }
-          accumulator = function(accumulator!)
+          accumulator = (function(accumulator!.value), "\(symbol)(\(accumulator!.text))")
+        
         }
       case .binarryOperation(let function):
-        print("accumulator:  \(accumulator)")
-        if accumulator != nil { //checks if there are operands to work with
-          pendingDescription = false
-          performPendingBinaryOperation()
-          description += symbol
-          pendingBinaryOperation = PendingBinaryOperation(function: function, firstOperand: accumulator!, mathematicalSymbol: symbol)
+        if accumulator != nil {
+          if resultIsPending {
+            performPendingBinaryOperation() // 5 + 5 +   (10)
+          }
+          pendingBinaryOperation = PendingBinaryOperation.init(function: function, firstOperand: accumulator!, mathematicalSymbol: symbol)
           accumulator = nil
         }
         
       case .equals:
         performPendingBinaryOperation()
-      case .clear:
-        clear()
       case .random:
         setOperand(random())
       }
@@ -90,55 +73,62 @@ struct CalculatorBrain {
   private func random() -> Double{
     return Double(arc4random()) / Double(UINT32_MAX)
   }
-  private mutating func performPendingBinaryOperation() {
+  
+  private mutating func performPendingBinaryOperation()
+  {
     if pendingBinaryOperation != nil && accumulator != nil {
-            if (pendingDescription) {
-                // add nothing to description
-                pendingDescription = false
-            } else {
-              description += formatDisplay(accumulator!) // not true for (g): 7 + 9√=
-            }
-      
-      accumulator = pendingBinaryOperation!.perform(with: accumulator!)
-      print("description\(description)")
-      
+      print("acc: \(accumulator!)")
+      accumulator = pendingBinaryOperation?.perform(with: accumulator!)
       pendingBinaryOperation = nil
     }
+  
   }
+  
   private var pendingBinaryOperation: PendingBinaryOperation?
-  private var pendingDescription = false
   
   private struct PendingBinaryOperation {
     let function: (Double,Double) -> Double
-    let firstOperand: Double
+    let firstOperand: Operand
     let mathematicalSymbol:String
     
-    func perform(with secondOperand: Double) -> Double {
-      return function(firstOperand, secondOperand)
+    func perform(with secondOperand: Operand) -> Operand {
+      return (function(firstOperand.value, secondOperand.value), "\(firstOperand.text) \(mathematicalSymbol) \(secondOperand.text)")
+ 
     }
+    
   }
   
   mutating func setOperand(_ operand: Double) {
-    accumulator = operand
-    print("SetOperand Description: \(description)")
-    
-    if pendingBinaryOperation == nil {
-      description = formatDisplay(operand)
-    }
+    accumulator = (operand, String(formatDisplay(operand)))
   }
   
   mutating func clear() {
-    accumulator = 0 // ili nil pa dodati clear u view-u.
-    description = " "
+    accumulator = nil
     pendingBinaryOperation = nil
-    
   }
-  var result: (Double?,String)  {
-    return (accumulator, description)
+  
+  var result: Double?  {
+    return accumulator?.value ?? pendingBinaryOperation?.firstOperand.value
   }
   
   var resultIsPending: Bool {
     return pendingBinaryOperation != nil
+  }
+  
+  var description: String {
+    if resultIsPending {
+      if accumulator != nil {
+        if accumulator!.text != String(accumulator!.value) {
+          print("text != String(value)")
+          return "\(pendingBinaryOperation!.firstOperand.text) \(pendingBinaryOperation!.mathematicalSymbol) \(accumulator!.text)"
+        }
+        
+      }
+      print("pendingBinaryOperation!.firstOperand.text \(pendingBinaryOperation!.firstOperand.text)")
+      return "\(pendingBinaryOperation!.firstOperand.text) \(pendingBinaryOperation!.mathematicalSymbol)"
+    } else {
+      return "\(accumulator?.text ?? "0")"
+    }
   }
   
   // format and round number
