@@ -43,10 +43,11 @@ class ViewController: UIViewController {
       return Double(display.text!) ?? Double.nan
     }
     set {
-      let text = brain.formatDisplay(newValue)
-//      if text.is
-      display.text = brain.formatDisplay(newValue)
-      //      history.text = brain.description + (brain.resultIsPending ? " ..." : " =")
+      if newValue.isInfinite || newValue.isNaN {
+          display.text = "Error"
+      }else {
+        display.text = brain.formatDisplay(newValue)
+      }
     }
   }
   
