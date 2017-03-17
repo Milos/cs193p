@@ -15,6 +15,12 @@ struct CalculatorBrain: CustomStringConvertible {
   
   private var accumulator: Operand?
   
+  private var internalSequence = [OperationSequenceItem]()
+  
+  private struct OperationSequenceItem {
+    var operand: Operand?
+    var symbol: String?
+  }
   
   
   private enum Operation {
@@ -43,15 +49,16 @@ struct CalculatorBrain: CustomStringConvertible {
   
   mutating func performOperation(_ symbol: String) {
     if let operation = operations[symbol] {
-      switch operation {
+      internalSequence.append(OperationSequenceItem.init(operand: nil, symbol: symbol))
       
+      switch operation {
       case .constant(let value):
         accumulator = (value, "\(symbol)")
         
       case .unaryOperation(let function):
         if accumulator != nil {
           accumulator = (function(accumulator!.value), "\(symbol)(\(accumulator!.text))")
-        
+          
         }
       case .binarryOperation(let function):
         if accumulator != nil {
@@ -77,11 +84,10 @@ struct CalculatorBrain: CustomStringConvertible {
   private mutating func performPendingBinaryOperation()
   {
     if pendingBinaryOperation != nil && accumulator != nil {
-      print("acc: \(accumulator!)")
       accumulator = pendingBinaryOperation?.perform(with: accumulator!)
       pendingBinaryOperation = nil
     }
-  
+    
   }
   
   private var pendingBinaryOperation: PendingBinaryOperation?
@@ -93,18 +99,61 @@ struct CalculatorBrain: CustomStringConvertible {
     
     func perform(with secondOperand: Operand) -> Operand {
       return (function(firstOperand.value, secondOperand.value), "\(firstOperand.text) \(mathematicalSymbol) \(secondOperand.text)")
- 
+      
     }
     
   }
   
   mutating func setOperand(_ operand: Double) {
-    accumulator = (operand, String(formatDisplay(operand)))
+    setOperand((operand, String(formatDisplay(operand))))
+  }
+  
+  mutating func setOperand(_ operand: Operand) {
+    accumulator = (operand)
+    internalSequence.append(OperationSequenceItem.init(operand: accumulator, symbol: nil))
+    //    for item in internalSequence {
+    //      print("item.operand \(item.operand), item.symbol \(item.symbol)")
+    //    }
+  }
+  
+  var variables = [String: Double]()
+  
+  mutating func setOperand(variable named: String) {
+    accumulator = (variables[named] ?? 0, named)
+    internalSequence.append(OperationSequenceItem(operand: accumulator, symbol: nil))
+  }
+  
+  func evaluate(using variables: Dictionary<String, Double>? = nil) -> (result: Double?, isPending: Bool, description: String) {
+    var brain = CalculatorBrain()
+    if variables != nil {
+      brain.variables = variables! // copy
+    }
+    let sequence = internalSequence
+    for item in sequence {
+      if var operand = item.operand {
+        if let newValue = variables?[operand.text] { // value of M
+          operand.value = newValue
+        }
+        brain.setOperand(operand)
+      }
+      else if let symbol = item.symbol {
+        brain.performOperation(symbol)
+      }
+    }
+    return (brain.result, brain.resultIsPending, brain.description)
   }
   
   mutating func clear() {
     accumulator = nil
     pendingBinaryOperation = nil
+    variables.removeAll()
+    internalSequence.removeAll()
+  }
+  
+  mutating func undo() {
+    if internalSequence.count > 0 {
+      internalSequence.removeLast()
+    }
   }
   
   var result: Double?  {
@@ -119,12 +168,12 @@ struct CalculatorBrain: CustomStringConvertible {
     if resultIsPending {
       if accumulator != nil {
         if accumulator!.text != String(accumulator!.value) {
-          print("text != String(value)")
+          //          print("text != String(value)")
           return "\(pendingBinaryOperation!.firstOperand.text) \(pendingBinaryOperation!.mathematicalSymbol) \(accumulator!.text)"
         }
         
       }
-      print("pendingBinaryOperation!.firstOperand.text \(pendingBinaryOperation!.firstOperand.text)")
+      //      print("pendingBinaryOperation!.firstOperand.text \(pendingBinaryOperation!.firstOperand.text)")
       return "\(pendingBinaryOperation!.firstOperand.text) \(pendingBinaryOperation!.mathematicalSymbol)"
     } else {
       return "\(accumulator?.text ?? "0")"

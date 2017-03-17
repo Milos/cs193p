@@ -13,6 +13,7 @@ class ViewController: UIViewController {
   @IBOutlet weak var display: UILabel!
   
   @IBOutlet weak var history: UILabel!
+  
   var userIsInTheMiddleOfTyping = false
   
   @IBAction func touchDigit(_ sender: UIButton) {
@@ -40,8 +41,8 @@ class ViewController: UIViewController {
       return Double(display.text!)!
     }
     set {
-        display.text = brain.formatDisplay(newValue)
-        history.text = brain.description + (brain.resultIsPending ? " ..." : " =")
+      display.text = brain.formatDisplay(newValue)
+//      history.text = brain.description + (brain.resultIsPending ? " ..." : " =")
     }
   }
   
@@ -50,20 +51,31 @@ class ViewController: UIViewController {
   @IBAction func performOperation(_ sender: UIButton) {
     if userIsInTheMiddleOfTyping {
       brain.setOperand(displayValue)
-      
       userIsInTheMiddleOfTyping = false
     }
     if let mathematicalSymbol = sender.currentTitle {
       brain.performOperation(mathematicalSymbol)
     }
-
-    displayValue = brain.result!
+    //    displayValue = brain.result!
+    evaluate()
     
   }
+  
   @IBAction func clear(_ sender: UIButton) {
     brain.clear()
     display.text = "0"
     history.text = ""
+    userIsInTheMiddleOfTyping = false
+  }
+  
+  @IBAction func touchVariable(_ sender: UIButton) {
+    brain.setOperand(variable: sender.currentTitle ?? "")
+    display.text = sender.currentTitle ?? ""
+  }
+  
+  @IBAction func touchToEvaluate(_ sender: UIButton) {
+    brain.variables["M"] = displayValue
+    evaluate()
   }
   
   @IBAction func backspace() {
@@ -76,9 +88,28 @@ class ViewController: UIViewController {
         }
         display.text = text
       }
+    } else {
+      brain.undo()
+      evaluate()
     }
   }
   
+  private func evaluate() {
+    let (result, resultIsPending, description) = brain.evaluate(using: brain.variables)
+    if result != nil {
+      history.text = description + (resultIsPending ? " ..." : " =")
+      displayValue = result!
+    }
+    userIsInTheMiddleOfTyping = false
+  }
+  
+  override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+    // if result is pending, it should not segue to graph view
+    if identifier == "graph" && brain.resultIsPending {
+      return false
+    }
+    return true
+  }
   
 }
 
