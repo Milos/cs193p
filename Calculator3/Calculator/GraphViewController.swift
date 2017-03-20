@@ -57,7 +57,7 @@ extension UIViewController {
 
 extension GraphViewController: GraphViewDataSource {
   
-  func calculateY(_ graphView: GraphView, xValue x: CGFloat) -> CGFloat? {
+  func calculateY(xValue x: CGFloat) -> CGFloat? {
     if brain != nil {
       brain!.variables["M"] = Double(x)
       let (result, isPending, _) = brain!.evaluate(using: brain!.variables)

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol GraphViewDataSource: class {
-  func calculateY(_ graphView: GraphView, xValue x: CGFloat) -> CGFloat?
+  func calculateY(xValue x: CGFloat) -> CGFloat?
 }
 
 @IBDesignable
@@ -62,19 +62,17 @@ class GraphView: UIView {
   
   // pass function
   private func drawGraph() {
-    //    var paths = [UIBezierPath]()
     let path = UIBezierPath()
     var firstLoop = true
     
     for xPoint in stride(from: bounds.minX, to: bounds.maxX, by: 2) {
       let xValue = getXValue(xPoint)
-      if let yValue = delegate?.calculateY(self, xValue: xValue) {
-        if (!yValue.isNormal && !yValue.isZero) {   //  ( t ili N = T => N)
+      if let yValue = delegate?.calculateY(xValue: xValue) {
+        if (!yValue.isNormal && !yValue.isZero) {
           firstLoop = true
           continue
         }
         
-        // x je isti a y ide gore/dole, za svako PI
         let yPoint = getYPosition(yValue)
         
         let point = CGPoint(x: xPoint, y: yPoint)
@@ -100,78 +98,8 @@ class GraphView: UIView {
     drawGraph()
     drawer.drawAxes(in: self.bounds, origin: axesCenter, pointsPerUnit: scale)
     
-    // circle in center
-    //    let path = UIBezierPath(arcCenter: axesCenter, radius: 4, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: false)
-    //    color.set()
-    //    path.fill()
-    //    path.stroke()
-    
   }
   
-  
-  private func generatePaths() -> [UIBezierPath] {
-    
-    var paths = [UIBezierPath]()
-    
-    var firstLoop = true
-    var path = UIBezierPath()
-    paths.append(path)
-    
-    for xPoint in stride(from: bounds.minX, to: bounds.maxX, by: 2) {
-      if let yValue = delegate?.calculateY(self, xValue: getXValue(CGFloat(xPoint))) {
-        print (yValue)
-        let yPoint = getYPosition(yValue)
-        let point = CGPoint.init(x: xPoint, y: yPoint)
-        guard checkValidation(of: point) else {
-          if !firstLoop {
-            path = UIBezierPath()
-            paths.append(path)
-            firstLoop = true
-          }
-          continue
-        }
-        if firstLoop {
-          path.move(to: point)
-          firstLoop = false
-        } else {
-          path.addLine(to: point)
-        }
-      }
-    }
-    
-    return paths
-  }
-  
-  private func checkValidation(of point: CGPoint) -> Bool {
-    return self.bounds.contains(point)
-  }
-  
-  //
-  //  override func draw(_ rect: CGRect) {
-  //    print("draw() called")
-  //    drawer.drawAxes(in: self.bounds, origin: axesCenter, pointsPerUnit: scale)
-  //    color.set()
-  //    let paths = generatePaths()
-  //    for path in paths {
-  //      path.stroke()
-  //    }
-  //  }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  // x=0,y=1
   private func getXValue(_ xPosition: CGFloat) -> CGFloat{
     return (xPosition - axesCenter.x) / scale
   }
