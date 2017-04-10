@@ -34,7 +34,7 @@ class GraphView: UIView {
     }
   }
   
-  // Gesture Handlers (should be private)
+  // Gesture Handlers
   func handlePinchGesture(_ pinchGesture: UIPinchGestureRecognizer) {
     scale *= pinchGesture.scale
     pinchGesture.scale = 1
