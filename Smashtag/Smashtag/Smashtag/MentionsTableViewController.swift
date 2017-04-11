@@ -23,66 +23,72 @@ class MentionsTableViewController: UITableViewController {
   }
   
   private enum SectionContent {
-    case mentions([Twitter.Mention])
-    case media([Twitter.MediaItem])
+    case mention(Twitter.Mention)
+    case media(Twitter.MediaItem)
+    
+    var associatedValue: Any {
+      switch self {
+      case .media(let mediaItem):
+        return mediaItem
+      case .mention(let mention):
+        return mention
+      }
+    }
   }
   
-  private enum SectionType {
-    case image(String)
-    case userMention(String)
-    case url(String)
-    case hashtag(String)
+  private enum SectionType: String {
+    case image = "Images mentions"
+    case userMention = "User mentions"
+    case url = "URL mentions"
+    case hashtag = "Hashtags mentions"
   }
-  
-//  private enum SectionType: String {
-//    case image = "Images mentions"
-//    case userMention = "User mentions"
-//    case url = "URL mentions"
-//    case hashtag = "Hashtags mentions"
-//  }
   
   private struct Section {
     var contents: [SectionContent]
-    var headline: String
-//    var type: SectionType
+    var type: SectionType
   }
   
-  private let sectionsTypes = [
-    SectionType.hashtag("Hashtags mentions"),
-    .url("Url mentions"),
-    .userMention("Users mentions"),
-    .image("Images")
-  ]
-  
   private var sections = [Section]()
+  private let sectionTypes: [SectionType] = [.hashtag, .image, .url, .userMention]
   
-  private func prepareInternalData(){
+  func prepareInternalData(){
     sections.removeAll()
+    var sectionData = [SectionContent]()
     
-    
-    for sectionsType in sectionsTypes {
-
-      switch sectionsType {
-      case .hashtag(let value):
-        if let hashtags = tweet?.hashtags, hashtags.count > 0 {
-          sections.append(Section.init(contents: [SectionContent.mentions(hashtags)], headline: value))
-        }
-      case .url(let value):
-        if let urls = tweet?.urls, urls.count > 0 {
-          sections.append(Section.init(contents: [SectionContent.mentions(urls)], headline: value))
-        }
-      case .userMention(let value):
-        if let userMentions = tweet?.userMentions, userMentions.count > 0 {
-          sections.append(Section.init(contents: [SectionContent.mentions(userMentions)], headline: value))
-        }
-      case .image(let value):
-        if let images = tweet?.media, images.count > 0 {
-          sections.append(Section.init(contents: [SectionContent.media(images)], headline: value))
-        }
-        
-      }
+    for sectionsType in sectionTypes {
       
+      switch sectionsType {
+      case .hashtag:
+        if let hashtags = tweet?.hashtags, hashtags.count > 0 {
+          for hashtag in hashtags {
+            sectionData = [SectionContent.mention(hashtag)]
+          }
+          sections.append(Section.init(contents: sectionData, type: .hashtag))
+        }
+      case .url:
+        if let urls = tweet?.urls, urls.count > 0 {
+          for url in urls {
+            sectionData = [SectionContent.mention(url)]
+          }
+          sections.append(Section.init(contents: sectionData, type: .url))
+        }
+      case .userMention:
+        if let userMentions = tweet?.userMentions, userMentions.count > 0 {
+          for userMention in userMentions {
+            sectionData = [SectionContent.mention(userMention)]
+          }
+          sections.append(Section.init(contents: sectionData, type: .userMention))
+        }
+      case .image:
+        if let images = tweet?.media, images.count > 0 {
+          for image in images {
+            sectionData = [SectionContent.media(image)]
+          }
+          sections.append(Section.init(contents: sectionData, type: .image))
+        }
+      }
     }
+    
   }
   
   func updateUI() {
@@ -91,6 +97,7 @@ class MentionsTableViewController: UITableViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    
     
   }
   
@@ -105,27 +112,39 @@ class MentionsTableViewController: UITableViewController {
   }
   
   func tableView( tableView : UITableView,  titleForHeaderInSection section: Int)->String {
-    return sections[section].headline
+    return sections[section].type.rawValue
   }
   
   override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//    var b = sectionsTypes[0]
-    return 0.0
+    if sections[indexPath.section].type == .image {
+      if let media = sections[indexPath.section].contents[indexPath.row].associatedValue as? MediaItem {
+        return view.frame.size.width / CGFloat(media.aspectRatio)
+      }
+    }
+    return UITableViewAutomaticDimension
   }
   
-  override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-    return "headline"
+  
+  override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+    //    var cell: UITableViewCell
+    //
+    //    let data = sections[indexPath.section].contents[indexPath.row]
+    //    switch data {
+    //    case .media(let mediaItem):
+    //      cell = tableView.dequeueReusableCell(withIdentifier: "Tweet Detail Media Cell", for: indexPath)
+    //      (cell as! ImageTableViewCell).setup(with: mediaItem)
+    //    case .mentions(let mention):
+    //      cell = tableView.dequeueReusableCell(withIdentifier: "Tweet Detail Text Cell", for: indexPath)
+    //      cell.textLabel?.text = mention.keyword
+    //    }
+    //
+    return cell
+    
+    
+    
   }
   
-  /*
-   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-   let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-   
-   // Configure the cell...
-   
-   return cell
-   }
-   */
   
   /*
    // Override to support conditional editing of the table view.
