@@ -67,8 +67,7 @@ struct CalculatorBrain: CustomStringConvertible {
           }
           pendingBinaryOperation = PendingBinaryOperation.init(function: function, firstOperand: accumulator!, mathematicalSymbol: symbol)
           accumulator = nil
-        }
-        
+        }        
       case .equals:
         performPendingBinaryOperation()
       case .random:

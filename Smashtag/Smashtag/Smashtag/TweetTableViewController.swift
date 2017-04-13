@@ -129,6 +129,14 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate {
     
     return cell
   }
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    if segue.identifier == "Tweet Detail" {
+      if let vc = segue.destination as? MentionsTableViewController,
+        let cell = sender as? TweetTableViewCell {
+        vc.tweet = cell.tweet
+      }
+    }
+  }
   
 }
 
