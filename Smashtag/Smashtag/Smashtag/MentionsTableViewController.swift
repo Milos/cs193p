@@ -16,7 +16,6 @@ class MentionsTableViewController: UITableViewController {
   
   var tweet: Twitter.Tweet? {
     didSet {
-      print("tweet: \(tweet?.description)")
       prepareInternalData()
       title = tweet?.user.name
       updateUI()
@@ -126,27 +125,41 @@ class MentionsTableViewController: UITableViewController {
           print(mediaItem.url.description)
           cell = tableView.dequeueReusableCell(withIdentifier: "Media Cell", for: indexPath)
           (cell as! ImageTableViewCell).setup(with: mediaItem)
-//          let data = try? Data(contentsOf: mediaItem.url)
-//          if let imageData = data {
-//            cell.layoutMargins = UIEdgeInsets.zero
-//            cell.imageView?.image = UIImage(data: imageData)
-//          }
           
         case .mention(let mention):
           print(mention.keyword)
           cell = tableView.dequeueReusableCell(withIdentifier: "Mention Cell", for: indexPath)
           cell.textLabel?.text = mention.keyword
         }
-    //
+    
     return cell
   }
-    
+  
+  
+  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    tableView.deselectRow(at: indexPath, animated: true)
+    if sections[indexPath.section].type == .url {
+      if let mention = sections[indexPath.section].contents[indexPath.row].associatedValue as? Mention, let url = URL.init(string: mention.keyword) {
+        if #available(iOS 10.0, *) {
+          UIApplication.shared.open(url)
+        } else {
+          UIApplication.shared.openURL(url)
+        }
+//        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+      }
+    }
+  }
   
    // MARK: - Navigation
   
    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-   // Get the new view controller using segue.destinationViewController.
-   // Pass the selected object to the new view controller.
+    if segue.identifier == "Image detail" {
+      if let vc = segue.destination as? ImageViewController,
+        let cell = sender as? ImageTableViewCell {
+        print("vc and cell correct")
+        vc.imageURL = cell.mediaItem?.url        
+      }
+    }
    }
   
   
