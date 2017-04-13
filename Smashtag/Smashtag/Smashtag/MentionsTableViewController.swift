@@ -94,7 +94,6 @@ class MentionsTableViewController: UITableViewController {
   // MARK: - Table view data source
   
   override func numberOfSections(in tableView: UITableView) -> Int {
-    print("sections.count \(sections.count)")
     return sections.count
     
   }
@@ -122,19 +121,16 @@ class MentionsTableViewController: UITableViewController {
     
         switch data {
         case .media(let mediaItem):
-          print(mediaItem.url.description)
           cell = tableView.dequeueReusableCell(withIdentifier: "Media Cell", for: indexPath)
           (cell as! ImageTableViewCell).setup(with: mediaItem)
           
         case .mention(let mention):
-          print(mention.keyword)
           cell = tableView.dequeueReusableCell(withIdentifier: "Mention Cell", for: indexPath)
           cell.textLabel?.text = mention.keyword
         }
     
     return cell
   }
-  
   
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
@@ -145,7 +141,6 @@ class MentionsTableViewController: UITableViewController {
         } else {
           UIApplication.shared.openURL(url)
         }
-//        UIApplication.shared.open(url, options: [:], completionHandler: nil)
       }
     }
   }
@@ -156,7 +151,6 @@ class MentionsTableViewController: UITableViewController {
     if segue.identifier == "Image detail" {
       if let vc = segue.destination as? ImageViewController,
         let cell = sender as? ImageTableViewCell {
-        print("vc and cell correct")
         vc.imageURL = cell.mediaItem?.url        
       }
     }
