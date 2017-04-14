@@ -85,7 +85,7 @@ class MentionsTableViewController: UITableViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-
+    
     tableView.estimatedRowHeight = tableView.rowHeight
     tableView.rowHeight = UITableViewAutomaticDimension
     
@@ -116,18 +116,18 @@ class MentionsTableViewController: UITableViewController {
   }
   
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell: UITableViewCell
-        let data = sections[indexPath.section].contents[indexPath.row] // row (SectionContent)
+    var cell: UITableViewCell
+    let data = sections[indexPath.section].contents[indexPath.row] // row (SectionContent)
     
-        switch data {
-        case .media(let mediaItem):
-          cell = tableView.dequeueReusableCell(withIdentifier: "Media Cell", for: indexPath)
-          (cell as! ImageTableViewCell).setup(with: mediaItem)
-          
-        case .mention(let mention):
-          cell = tableView.dequeueReusableCell(withIdentifier: "Mention Cell", for: indexPath)
-          cell.textLabel?.text = mention.keyword
-        }
+    switch data {
+    case .media(let mediaItem):
+      cell = tableView.dequeueReusableCell(withIdentifier: "Media Cell", for: indexPath)
+      (cell as! ImageTableViewCell).setup(with: mediaItem)
+      
+    case .mention(let mention):
+      cell = tableView.dequeueReusableCell(withIdentifier: "Mention Cell", for: indexPath)
+      cell.textLabel?.text = mention.keyword
+    }
     
     return cell
   }
@@ -145,16 +145,17 @@ class MentionsTableViewController: UITableViewController {
     }
   }
   
-   // MARK: - Navigation
+  // MARK: - Navigation
   
-   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == "Image detail" {
-      if let vc = segue.destination as? ImageViewController,
-        let cell = sender as? ImageTableViewCell {
-        vc.imageURL = cell.mediaItem?.url        
+      if let vc = segue.destination as? ImageViewController {
+        if let image = (sender as? ImageTableViewCell)?.customImageView.image {
+          vc.image = image
+        } else {
+          vc.imageURL = (sender as? ImageTableViewCell)?.mediaItem?.url // ne radi centriranje slike
+        }
       }
     }
-   }
-  
-  
+  }
 }

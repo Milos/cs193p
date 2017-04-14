@@ -38,7 +38,7 @@ class ImageViewController: UIViewController {
     }
   }
   
-  private var image: UIImage? {
+  var image: UIImage? {
     get {
       return imageView.image
     }
@@ -46,6 +46,7 @@ class ImageViewController: UIViewController {
       imageView.image = newValue
       imageView.sizeToFit() // size it's frame to fit the image inside it
       scrollView?.contentSize = imageView.frame.size
+      adjustImageView()
       spinner?.stopAnimating()
     }
   }
@@ -56,7 +57,6 @@ class ImageViewController: UIViewController {
   
   @IBOutlet weak var scrollView: UIScrollView! {
     didSet {
-      
       scrollView.delegate = self
       scrollView.minimumZoomScale = 0.03
       scrollView.maximumZoomScale = 1.0
@@ -73,6 +73,8 @@ class ImageViewController: UIViewController {
     super.viewWillAppear(animated)
     if image == nil {
       fetchImage()
+    } else {
+      adjustImageView()
     }
   }
   
@@ -83,4 +85,58 @@ extension ImageViewController : UIScrollViewDelegate
   func viewForZooming(in scrollView: UIScrollView) -> UIView? {
     return imageView
   }
+}
+
+// Auto fit image view in the center
+extension ImageViewController {
+  private var offset: CGPoint {
+    if scrollView != nil {
+      var x = scrollView.bounds.origin.x // 0
+      var y = scrollView.bounds.origin.y // 0
+      
+      if scrollView.contentSize.width > scrollView.frame.width { // image wider then superview width
+        x = (scrollView.contentSize.width - scrollView.frame.width) / 2 //
+      } else {
+        y = (scrollView.contentSize.height - scrollView.frame.height) / 2
+      }
+      
+      return CGPoint.init(x: x, y: y)
+    } else {
+      
+    }
+    return CGPoint.zero
+  }
+  
+  private var aspectRatio: CGFloat {
+    if let image = image {
+      return image.size.width / image.size.height
+    }
+    return 1
+  }
+  
+  private var zoomScale: CGFloat {
+    if let scrollView = scrollView, let image = image {
+      let zoomToWidth = scrollView.frame.width / image.size.width
+      let zoomToHeight = (scrollView.frame.height - scrollView.contentInset.top - scrollView.contentInset.bottom) / image.size.height
+      
+      if aspectRatio < scrollView.frame.width / scrollView.frame.height {
+        scrollView.minimumZoomScale = zoomToHeight
+        scrollView.maximumZoomScale = zoomToWidth * 2
+        return zoomToWidth
+      } else {
+        scrollView.minimumZoomScale = zoomToWidth
+        scrollView.maximumZoomScale = zoomToHeight * 2
+        return zoomToHeight
+      }
+    }
+    return 1
+  }
+  
+  fileprivate func adjustImageView() {
+    imageView.sizeToFit()
+    scrollView?.contentSize = imageView.frame.size
+    scrollView?.zoomScale = zoomScale
+    scrollView?.contentOffset = offset
+  }
+  
 }
