@@ -81,8 +81,8 @@
 		07B0713C1E8025400062051C /* Smashtag */ = {
 			isa = PBXGroup;
 			children = (
-				07D211C41E9FAD5800B7A99E /* ImageViewController.swift */,
 				07B071411E8025400062051C /* Main.storyboard */,
+				07D211C41E9FAD5800B7A99E /* ImageViewController.swift */,
 				07B071501E8025A20062051C /* TweetTableViewController.swift */,
 				07A869521E81391C003A6D50 /* TweetTableViewCell.swift */,
 				07D211BC1E9B8E8800B7A99E /* MentionsTableViewController.swift */,
