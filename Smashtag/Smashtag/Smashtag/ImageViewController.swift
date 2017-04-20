@@ -123,14 +123,14 @@ extension ImageViewController {
   private var zoomScale: CGFloat {
     if let scrollView = scrollView, let image = image {
       let zoomToWidth = scrollView.frame.width / image.size.width
-      let zoomToHeight = (scrollView.frame.height - scrollView.contentInset.top - scrollView.contentInset.bottom) / image.size.height
+      let zoomToHeight = (scrollView.frame.height - scrollView.contentInset.top - scrollView.contentInset.bottom) / image.size.height // contentInset is for navigation and bar controller
       
-      if aspectRatio < scrollView.frame.width / scrollView.frame.height {   // image wider then superview
-        scrollView.minimumZoomScale = zoomToHeight
+      if aspectRatio < scrollView.frame.width / scrollView.frame.height {   // image smaller in width then superview
+        scrollView.minimumZoomScale = zoomToHeight // image full heigth
         scrollView.maximumZoomScale = zoomToWidth * 2
         return zoomToWidth
-      } else {
-        scrollView.minimumZoomScale = zoomToWidth
+      } else { // image wider then scrollView
+        scrollView.minimumZoomScale = zoomToWidth // image full width
         scrollView.maximumZoomScale = zoomToHeight * 2
         return zoomToHeight
       }
