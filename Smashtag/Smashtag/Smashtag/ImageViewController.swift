@@ -143,11 +143,5 @@ extension ImageViewController {
     scrollView?.contentSize = imageView.frame.size
     scrollView?.zoomScale = zoomScale
     scrollView?.contentOffset = offset
-  }
-  
-//  override func viewWillLayoutSubviews() {
-//    super.viewWillLayoutSubviews()
-//    adjustImageView()
-//  }
-  
+  }    
 }
