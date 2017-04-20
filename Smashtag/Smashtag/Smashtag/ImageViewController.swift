@@ -78,6 +78,11 @@ class ImageViewController: UIViewController {
     }
   }
   
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    adjustImageView()
+  }
+  
 }
 
 extension ImageViewController : UIScrollViewDelegate
@@ -95,7 +100,7 @@ extension ImageViewController {
       var y = scrollView.bounds.origin.y // 0
       
       if scrollView.contentSize.width > scrollView.frame.width { // image wider then superview width
-        x = (scrollView.contentSize.width - scrollView.frame.width) / 2 //
+        x = (scrollView.contentSize.width - scrollView.frame.width) / 2
       } else {
         y = (scrollView.contentSize.height - scrollView.frame.height) / 2
       }
@@ -119,7 +124,7 @@ extension ImageViewController {
       let zoomToWidth = scrollView.frame.width / image.size.width
       let zoomToHeight = (scrollView.frame.height - scrollView.contentInset.top - scrollView.contentInset.bottom) / image.size.height
       
-      if aspectRatio < scrollView.frame.width / scrollView.frame.height {
+      if aspectRatio < scrollView.frame.width / scrollView.frame.height {   // image wider then superview
         scrollView.minimumZoomScale = zoomToHeight
         scrollView.maximumZoomScale = zoomToWidth * 2
         return zoomToWidth
@@ -137,6 +142,11 @@ extension ImageViewController {
     scrollView?.contentSize = imageView.frame.size
     scrollView?.zoomScale = zoomScale
     scrollView?.contentOffset = offset
+  }
+  
+  override func viewWillLayoutSubviews() {
+    super.viewWillLayoutSubviews()
+    adjustImageView()
   }
   
 }
