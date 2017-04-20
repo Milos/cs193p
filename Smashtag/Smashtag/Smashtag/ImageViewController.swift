@@ -67,6 +67,7 @@ class ImageViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    adjustImageView()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -144,9 +145,9 @@ extension ImageViewController {
     scrollView?.contentOffset = offset
   }
   
-  override func viewWillLayoutSubviews() {
-    super.viewWillLayoutSubviews()
-    adjustImageView()
-  }
+//  override func viewWillLayoutSubviews() {
+//    super.viewWillLayoutSubviews()
+//    adjustImageView()
+//  }
   
 }
