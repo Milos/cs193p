@@ -125,7 +125,7 @@ extension ImageViewController {
       let zoomToWidth = scrollView.frame.width / image.size.width
       let zoomToHeight = (scrollView.frame.height - scrollView.contentInset.top - scrollView.contentInset.bottom) / image.size.height // contentInset is for navigation and bar controller
       
-      if aspectRatio < scrollView.frame.width / scrollView.frame.height {   // image smaller in width then superview
+      if aspectRatio < scrollView.frame.width / scrollView.frame.height {   // image smaller in width then superview (scrollView)
         scrollView.minimumZoomScale = zoomToHeight // image full heigth
         scrollView.maximumZoomScale = zoomToWidth * 2
         return zoomToWidth

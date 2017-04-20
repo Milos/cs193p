@@ -46,14 +46,22 @@ class TweetTableViewCell: UITableViewCell
     
     
     tweetUserLabel?.text = tweet?.user.description
+    
+    tweetProfileImageView.image = nil
     if let profileImageURL = tweet?.user.profileImageURL {
-      // FIXME: blocks main thread
-      if let imageData = try? Data(contentsOf: profileImageURL) {
-        tweetProfileImageView?.image = UIImage(data: imageData)
+      DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+        if let imageData = try? Data(contentsOf: profileImageURL) {
+          DispatchQueue.main.async {
+            if profileImageURL == self?.tweet?.user.profileImageURL {
+              self?.tweetProfileImageView.image = UIImage(data: imageData)
+            }
+          }
+        }
       }
     } else {
-      tweetProfileImageView?.image = nil
+      tweetProfileImageView.image = nil
     }
+    
     if let created = tweet?.created {
       let formatter = DateFormatter()
       if Date().timeIntervalSince(created) > 24*60*60 {
