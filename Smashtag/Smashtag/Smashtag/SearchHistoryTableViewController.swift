@@ -10,9 +10,7 @@ import UIKit
 
 class SearchHistoryTableViewController: UITableViewController {
   
-  
   var searchedTerms: [String]? = nil
-  
   
   // MARK: - View Lifecycle
   
@@ -29,6 +27,7 @@ class SearchHistoryTableViewController: UITableViewController {
     tableView.reloadData()
     
   }
+  
   // MARK: - Table view data source
   
   override func numberOfSections(in tableView: UITableView) -> Int {
@@ -47,8 +46,6 @@ class SearchHistoryTableViewController: UITableViewController {
     return cell
   }
   
-
-  
    // MARK: - Navigation
    
    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -59,6 +56,5 @@ class SearchHistoryTableViewController: UITableViewController {
       }
     }
    }
-  
   
 }
