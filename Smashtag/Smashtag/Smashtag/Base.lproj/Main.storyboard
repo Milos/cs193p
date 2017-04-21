@@ -212,6 +212,8 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" systemItem="search" id="QRK-Du-jeS"/>
                     <toolbarItems/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="414" height="736"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="aed-Iz-M6i">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -228,10 +230,10 @@
         <!--Tab Bar Controller-->
         <scene sceneID="XZl-xe-eRr">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="NdA-ny-mXL" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="D5h-g9-vi1" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="dY4-BH-ajd">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
@@ -240,25 +242,29 @@
                         <segue destination="AKm-p0-EmI" kind="relationship" relationship="viewControllers" id="tGO-mt-W8A"/>
                     </connections>
                 </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NdA-ny-mXL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="95.652173913043484" y="6.5217391304347831"/>
         </scene>
-        <!--Tweet Table View Controller-->
+        <!--Search History Table View Controller-->
         <scene sceneID="jWt-w1-7rn">
             <objects>
-                <tableViewController id="hC1-Xk-73y" customClass="TweetTableViewController" customModule="Smashtag" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="hC1-Xk-73y" customClass="SearchHistoryTableViewController" customModule="Smashtag" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="27" sectionHeaderHeight="28" sectionFooterHeight="28" id="Wh7-HG-mFn">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Tweet" rowHeight="27" id="XGR-nP-zgv" userLabel="Search Term" customClass="TweetTableViewCell" customModule="Smashtag" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Searched Term Cell" rowHeight="27" id="XGR-nP-zgv" userLabel="Searched Term Cell" customClass="TweetTableViewCell" customModule="Smashtag" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="414" height="27"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XGR-nP-zgv" id="c4c-H9-2H1">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="26.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="df1-Zi-aIY" kind="show" identifier="Search Term" id="aXQ-hN-WYF"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -278,7 +284,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="AKm-p0-EmI" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="recents" id="Wgg-Oi-7mf"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="D3y-1y-AOv">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="D3y-1y-AOv">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -292,4 +298,7 @@
             <point key="canvasLocation" x="258" y="812"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="dEo-ER-BPl"/>
+    </inferredMetricsTieBreakers>
 </document>

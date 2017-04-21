@@ -37,6 +37,19 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate {
   // that finds tweets that match our searchText
   private func twitteRequest() -> Twitter.Request? {
     if let query = searchText, !query.isEmpty {
+      
+      let defaults = UserDefaults.standard
+      var storedQuestionsAsked = defaults.array(forKey: "searchedTerms") as? [String] ?? [String](repeatElement("", count: 10))
+      
+      // store new query in array only if it's not the same as the last element
+      if query != storedQuestionsAsked.last {
+        storedQuestionsAsked.removeFirst()
+        storedQuestionsAsked.append(query)
+      }
+      // update UserDefaults
+      defaults.set(storedQuestionsAsked, forKey: "searchedTerms")
+      
+      
       return Twitter.Request(search: query, count: 100)
     }
     return nil
@@ -54,7 +67,7 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate {
   // and then let the table view know that we added a section
   // (it will then call our UITableViewDataSource to get what it needs)
   private func searchForTweets() {
-    if let request = twitteRequest() { 
+    if let request = twitteRequest() {
       lastTwitterRequest = request
       request.fetchTweets {  [weak self] newTweets  in
         DispatchQueue.main.async {
@@ -117,8 +130,8 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate {
     
     // Configure the cell...
     // the textLabel and detailTextLabel are for non-Custom cells
-//    cell.textLabel?.text = tweet.text
-//    cell.detailTextLabel?.text = tweet.user.name
+    //    cell.textLabel?.text = tweet.text
+    //    cell.detailTextLabel?.text = tweet.user.name
     // our outlets to our custom UI
     // are connected to this custom UITableViewCell-subclassed cell
     // so we need to tell it which tweet is shown in its row
