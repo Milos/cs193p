@@ -10,7 +10,7 @@ import UIKit
 
 class SearchHistoryTableViewController: UITableViewController {
   
-  var searchedTerms: [String]? = nil
+  var searchedTerms: [String]?
   
   // MARK: - View Lifecycle
   
@@ -22,7 +22,8 @@ class SearchHistoryTableViewController: UITableViewController {
     super.viewWillAppear(animated)
     // retrieve array from UserDefaults, ignore empty items and reverse 
     // order so the latest item is at top of the tableview
-    searchedTerms = ((UserDefaults.standard.array(forKey: "searchedTerms") as? [String])?.filter {!$0.isEmpty})
+//    searchedTerms = ((UserDefaults.standard.array(forKey: "searchedTerms") as? [String])?.filter {!$0.isEmpty})
+    searchedTerms = ((UserDefaults.standard.array(forKey: "searchedTerms") as? [String]))
     searchedTerms?.reverse()
     tableView.reloadData()
     

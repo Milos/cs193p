@@ -40,13 +40,23 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate {
       
       // Store latest 100 queries in UserDefaults
       let defaults = UserDefaults.standard
-      var storedQuestionsAsked = defaults.array(forKey: "searchedTerms") as? [String] ?? [String](repeatElement("", count: 100))
+      var storedQuestionsAsked = defaults.array(forKey: "searchedTerms") as? [String] ?? [String]()
       
-      // Store new query in array only if it's not the same as the last element
-      if query != storedQuestionsAsked.last {
-        storedQuestionsAsked.removeFirst()
+      func storeQueryToArray(_ query: String) {
+        let limit = 100
+        // ignore if array has hit its limit, or if the last element
+        // in the array is the same as the query
+        guard storedQuestionsAsked.count <= limit, query != storedQuestionsAsked.last  else { return }
+        
+        if storedQuestionsAsked.count == limit {
+          storedQuestionsAsked.removeFirst()
+        }
         storedQuestionsAsked.append(query)
       }
+      
+      // Store new query in array
+      storeQueryToArray(query)
+      
       // update UserDefaults
       defaults.set(storedQuestionsAsked, forKey: "searchedTerms")
       
