@@ -49,7 +49,7 @@ class SearchHistoryTableViewController: UITableViewController {
    
    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == "Search Term" {
-      if let vc = segue.destination as? TweetTableViewController,
+      if let vc = segue.destination as? HashtagAndUserTableViewController,
         let cell = sender as? TweetTableViewCell {
         vc.searchText = cell.textLabel?.text
       }

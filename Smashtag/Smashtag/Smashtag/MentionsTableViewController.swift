@@ -44,6 +44,7 @@ class MentionsTableViewController: UITableViewController {
     case hashtag = "Hashtags mentions"
   }
   
+  // section that contains hashtag image url and user mentions
   private struct Section {
     var headline: String?
     var contents: [SectionContent]
@@ -155,6 +156,18 @@ class MentionsTableViewController: UITableViewController {
           vc.image = image
         } else {
           vc.imageURL = (sender as? ImageTableViewCell)?.mediaItem?.url // ne radi centriranje slike
+        }
+      }
+    } else if segue.identifier == "Hashtag or User Detail" {
+      if let vc = segue.destination as? HashtagAndUserTableViewController {
+        if let indexPath = self.tableView.indexPathForSelectedRow {
+          if sections[indexPath.section].type == .hashtag {
+            let mention = sections[indexPath.section].contents[indexPath.row].associatedValue as? Mention
+            vc.searchText = mention?.keyword
+          } else if sections[indexPath.section].type == .userMention {
+            let mention = sections[indexPath.section].contents[indexPath.row].associatedValue as? Mention
+            vc.searchText = mention?.keyword
+          }
         }
       }
     }

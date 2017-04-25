@@ -13,7 +13,7 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate {
   
   
   // MARK: Model
-  
+
   private var tweets = [Array<Twitter.Tweet>]() {
     didSet {
       //      print(tweets)
@@ -152,6 +152,7 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate {
     
     return cell
   }
+  
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == "Tweet Detail" {
       if let vc = segue.destination as? MentionsTableViewController,
