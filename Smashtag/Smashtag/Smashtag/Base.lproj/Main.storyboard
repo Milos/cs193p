@@ -256,12 +256,21 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Searched Term Cell" rowHeight="27" id="XGR-nP-zgv" userLabel="Searched Term Cell" customClass="TweetTableViewCell" customModule="Smashtag" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Searched Term Cell" textLabel="wpD-eo-Lq9" style="IBUITableViewCellStyleDefault" id="XGR-nP-zgv" userLabel="Searched Term Cell" customClass="TweetTableViewCell" customModule="Smashtag" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="414" height="27"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XGR-nP-zgv" id="c4c-H9-2H1">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="26.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="26.666666666666668"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wpD-eo-Lq9">
+                                            <rect key="frame" x="15" y="0.0" width="384" height="26.666666666666668"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                 </tableViewCellContentView>
                                 <connections>
                                     <segue destination="IAw-Xy-4tT" kind="show" identifier="Search Term" id="cuG-uO-zKx"/>
@@ -383,6 +392,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="bBk-vm-LRL"/>
+        <segue reference="cuG-uO-zKx"/>
     </inferredMetricsTieBreakers>
 </document>
