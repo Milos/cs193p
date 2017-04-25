@@ -16,17 +16,15 @@ class SearchHistoryTableViewController: UITableViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    title = "Search History"
   }
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    // retrieve array from UserDefaults, ignore empty items and reverse 
-    // order so the latest item is at top of the tableview
-//    searchedTerms = ((UserDefaults.standard.array(forKey: "searchedTerms") as? [String])?.filter {!$0.isEmpty})
+    // retrieve array from UserDefaults and reverse
     searchedTerms = ((UserDefaults.standard.array(forKey: "searchedTerms") as? [String]))
     searchedTerms?.reverse()
     tableView.reloadData()
-    
   }
   
   // MARK: - Table view data source

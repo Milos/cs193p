@@ -58,8 +58,7 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate {
       storeQueryToArray(query)
       
       // update UserDefaults
-      defaults.set(storedQuestionsAsked, forKey: "searchedTerms")
-      
+      defaults.set(storedQuestionsAsked, forKey: "searchedTerms")      
       
       return Twitter.Request(search: query, count: 100)
     }

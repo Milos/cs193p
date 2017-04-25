@@ -178,10 +178,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J17-rL-Hz2">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                             </scrollView>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="550-bM-StC" userLabel="Spinner">
-                                <rect key="frame" x="188" y="324.66666666666669" width="37" height="37"/>
+                                <rect key="frame" x="188" y="349.66666666666669" width="37" height="37"/>
                                 <color key="color" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             </activityIndicatorView>
                         </subviews>
@@ -190,8 +190,8 @@
                             <constraint firstAttribute="trailing" secondItem="J17-rL-Hz2" secondAttribute="trailing" id="5dR-50-fvx"/>
                             <constraint firstItem="J17-rL-Hz2" firstAttribute="centerY" secondItem="550-bM-StC" secondAttribute="centerY" id="9Vg-ZE-iM4"/>
                             <constraint firstItem="J17-rL-Hz2" firstAttribute="top" secondItem="GgJ-75-oB4" secondAttribute="top" id="GIy-Sr-NID"/>
-                            <constraint firstItem="J17-rL-Hz2" firstAttribute="bottom" secondItem="nrB-Jf-B7p" secondAttribute="top" id="Nz9-Yi-E1g"/>
                             <constraint firstItem="J17-rL-Hz2" firstAttribute="leading" secondItem="GgJ-75-oB4" secondAttribute="leading" id="WoD-OB-tP2"/>
+                            <constraint firstAttribute="bottom" secondItem="J17-rL-Hz2" secondAttribute="bottom" id="nMT-qc-39S"/>
                             <constraint firstItem="J17-rL-Hz2" firstAttribute="centerX" secondItem="550-bM-StC" secondAttribute="centerX" id="nPB-zi-PaO"/>
                         </constraints>
                     </view>
@@ -212,8 +212,6 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" systemItem="search" id="QRK-Du-jeS"/>
                     <toolbarItems/>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="414" height="736"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="aed-Iz-M6i">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -284,7 +282,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="AKm-p0-EmI" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="recents" id="Wgg-Oi-7mf"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="D3y-1y-AOv">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="D3y-1y-AOv">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
