@@ -14,10 +14,9 @@ class HashtagAndUserTableViewController: UITableViewController {
   
   // MARK: - MODEL
   
-  private var tweets = [Array<Twitter.Tweet>]() {
-    didSet {
-    }
-  }
+  private var tweets = [Array<Twitter.Tweet>]()
+
+
   
   // MARK: - API
   

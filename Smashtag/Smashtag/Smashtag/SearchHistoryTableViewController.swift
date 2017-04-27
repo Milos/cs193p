@@ -49,8 +49,7 @@ class SearchHistoryTableViewController: UITableViewController {
   
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "Searched Term Cell", for: indexPath)
-    let latestSearchedTerms:[String]? = searchedTerms?.reversed()
-    let searchedTerm = latestSearchedTerms?[indexPath.row]
+    let searchedTerm = searchedTerms?[indexPath.row]
     cell.textLabel?.text = searchedTerm
     return cell
   }

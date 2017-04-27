@@ -14,11 +14,7 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate {
   
   // MARK: Model
 
-  private var tweets = [Array<Twitter.Tweet>]() {
-    didSet {
-      //      print(tweets)
-    }
-  }
+  private var tweets = [Array<Twitter.Tweet>]()
   
   var searchText: String? {
     didSet {
@@ -46,19 +42,19 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate {
         let limit = 100
         // ignore if array has hit its limit, or if the last element
         // in the array is the same as the query
-        guard storedQuestionsAsked.count <= limit, query != storedQuestionsAsked.last  else { return }
+        guard storedQuestionsAsked.count <= limit, query != storedQuestionsAsked.first  else { return }
         
         if storedQuestionsAsked.count == limit {
           storedQuestionsAsked.removeFirst()
         }
-        storedQuestionsAsked.append(query)
+        storedQuestionsAsked.insert(query, at: 0)
       }
       
       // Store new query in array
       storeQueryToArray(query)
       
       // update UserDefaults
-      defaults.set(storedQuestionsAsked, forKey: "searchedTerms")      
+      defaults.set(storedQuestionsAsked, forKey: "searchedTerms")
       
       return Twitter.Request(search: query, count: 100)
     }
@@ -101,8 +97,6 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate {
     // the row height could alternatively be set
     // using the UITableViewDelegate method heightForRowAt
   }
-  
-
   
   // MARK: Search Text Field
   
