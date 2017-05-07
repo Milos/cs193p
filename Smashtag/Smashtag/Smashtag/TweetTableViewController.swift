@@ -20,6 +20,7 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate {
     didSet {
       searchTextField?.text = searchText
       searchTextField?.resignFirstResponder() // keyboard
+      lastTwitterRequest = nil
       tweets.removeAll()
       tableView.reloadData()
       searchForTweets()
@@ -78,16 +79,24 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate {
   // and then let the table view know that we added a section
   // (it will then call our UITableViewDataSource to get what it needs)
   private func searchForTweets() {
-    if let request = twitteRequest() {
+    if let request = lastTwitterRequest?.newer ?? twitteRequest() {
       lastTwitterRequest = request
-      request.fetchTweets {  [weak self] newTweets  in
-        DispatchQueue.main.async {
+      request.fetchTweets {  [weak self] newTweets  in // this is off the main queue
+        DispatchQueue.main.async { // so we must dispatch back to main queue
           if request == self?.lastTwitterRequest {
             self?.insertTweets(newTweets)
           }
+          self?.refreshControl?.endRefreshing() // REFRESHING
         }
       }
+    } else {
+      self.refreshControl?.endRefreshing() // REFRESHING
     }
+  }
+  
+  @IBAction func refresh(_ sender: UIRefreshControl) {
+    print("searchForTweets()")
+    searchForTweets()
   }
   
   // MARK: View Controller Lifecycle
