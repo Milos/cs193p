@@ -22,27 +22,6 @@ struct RecentSearches
     return defaults.object(forKey: Constants.key) as? [String] ?? []
   }
   
-//  static func add(_ query: String) {
-//    var newArray = searches
-//    
-//    // case insesitive and unique
-//    func storeQueryToArray(_ query: String) {
-//      // ignore if array has hit its limit, or if the last element in the array is the same as the query
-//      guard newArray.count <= Constants.limit, query != newArray.first  else { return }
-//      
-//      if searches.count == Constants.limit {
-//        newArray.removeFirst()
-//      }
-//      newArray.insert(query, at: 0)
-//    }
-//    // Store new query in array
-//    storeQueryToArray(query)
-//    
-//    // update UserDefaults
-//    defaults.set(newArray, forKey: Constants.key)
-//  }
-  
-  
   static func add(_ query: String) {
     var newArray = searches.filter { query.caseInsensitiveCompare($0) != .orderedSame }
     newArray.insert(query, at: 0)
