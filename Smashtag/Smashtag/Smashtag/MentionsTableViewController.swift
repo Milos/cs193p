@@ -58,7 +58,7 @@ class MentionsTableViewController: UITableViewController {
   func prepareInternalData() {
     sections.removeAll()
     
-    func appendSectionData(title: String, mentions: [Mention], type: SectionType) {
+    func appendSectionData(title: String, mentions: [Twitter.Mention], type: SectionType) {
       var sectionData = [SectionContent]()
       for mention in mentions {
         sectionData.append(SectionContent.mention(mention))
@@ -137,7 +137,7 @@ class MentionsTableViewController: UITableViewController {
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
     if sections[indexPath.section].type == .url {
-      if let mention = sections[indexPath.section].contents[indexPath.row].associatedValue as? Mention, let url = URL.init(string: mention.keyword) {
+      if let mention = sections[indexPath.section].contents[indexPath.row].associatedValue as? Twitter.Mention, let url = URL.init(string: mention.keyword) {
         if #available(iOS 10.0, *) {
           UIApplication.shared.open(url)
         } else {
@@ -162,10 +162,10 @@ class MentionsTableViewController: UITableViewController {
       if let vc = segue.destination as? HashtagAndUserTableViewController {
         if let indexPath = self.tableView.indexPathForSelectedRow {
           if sections[indexPath.section].type == .hashtag {
-            let mention = sections[indexPath.section].contents[indexPath.row].associatedValue as? Mention
+            let mention = sections[indexPath.section].contents[indexPath.row].associatedValue as? Twitter.Mention
             vc.searchText = mention?.keyword
           } else if sections[indexPath.section].type == .userMention {
-            let mention = sections[indexPath.section].contents[indexPath.row].associatedValue as? Mention
+            let mention = sections[indexPath.section].contents[indexPath.row].associatedValue as? Twitter.Mention
             vc.searchText = mention?.keyword
           }
         }

@@ -105,12 +105,12 @@ class SearchHistoryTableViewController: UITableViewController {
   }
   
   // MARK: - Navigation
-  
+
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    if segue.identifier == "Search Term" {
-      if let vc = segue.destination as? HashtagAndUserTableViewController,
+    if segue.identifier == "Show Popular Mentions" {
+      if let vc = segue.destination as? PopularMentionsTableViewController,
         let cell = sender as? TweetTableViewCell {
-        vc.searchText = cell.textLabel?.text
+        vc.mention = cell.textLabel?.text?.lowercased()
       }
     }
   }

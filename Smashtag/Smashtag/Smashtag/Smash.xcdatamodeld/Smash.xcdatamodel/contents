@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12141" systemVersion="16E195" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Mention" representedClassName=".Mention" syncable="YES" codeGenerationType="category">
+        <attribute name="popularity" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="searchedTerm" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SearchTerm" inverseName="mentions" inverseEntity="SearchTerm" syncable="YES"/>
+        <relationship name="tweets" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tweet" inverseName="mentions" inverseEntity="Tweet" syncable="YES"/>
+    </entity>
+    <entity name="SearchTerm" representedClassName=".SearchTerm" syncable="YES" codeGenerationType="category">
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="mentions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Mention" inverseName="searchedTerm" inverseEntity="Mention" syncable="YES"/>
+    </entity>
+    <entity name="Tweet" representedClassName=".Tweet" syncable="YES" codeGenerationType="category">
+        <attribute name="unique" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="mentions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Mention" inverseName="tweets" inverseEntity="Mention" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Mention" positionX="-36" positionY="27" width="128" height="118"/>
+        <element name="SearchTerm" positionX="-227" positionY="35" width="128" height="73"/>
+        <element name="Tweet" positionX="142" positionY="-22" width="128" height="73"/>
+    </elements>
+</model>

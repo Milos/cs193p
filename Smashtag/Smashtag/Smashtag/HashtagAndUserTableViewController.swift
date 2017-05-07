@@ -16,7 +16,6 @@ class HashtagAndUserTableViewController: UITableViewController {
   
   private var tweets = [Array<Twitter.Tweet>]()
 
-
   
   // MARK: - API
   
@@ -93,7 +92,7 @@ class HashtagAndUserTableViewController: UITableViewController {
       
       // get the tweet that is associated with this row
       // that the table view is asking us to provide a UITableViewCell for
-      let tweet: Tweet = tweets[indexPath.section][indexPath.row]
+      let tweet: Twitter.Tweet = tweets[indexPath.section][indexPath.row]
       
       // Configure the cell...
       // our outlets to our custom UI
@@ -106,11 +105,5 @@ class HashtagAndUserTableViewController: UITableViewController {
       
       return cell
     }
-    
-  
-  
-   // MARK: - Navigation
 
-
-  
 }
