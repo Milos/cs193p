@@ -3,4 +3,7 @@
  **Programming assignments:**
  
 - [x] Programming project 1: Calculator
-- [ ] Programming project 2: CalculatorBrain
+- [x] Programming project 2: CalculatorBrain
+- [x] Programming project 3: Graphing Calculator
+- [x] Programming project 4: Smashtag Mentions
+- [x] Programming project 5: Smashtag Mention Popularity
