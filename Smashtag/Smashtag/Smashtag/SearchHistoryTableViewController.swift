@@ -10,7 +10,6 @@ import UIKit
 
 class SearchHistoryTableViewController: UITableViewController {
   
-  var searchedTerms: [String]?
   
   // MARK: - View Lifecycle
   
@@ -23,18 +22,12 @@ class SearchHistoryTableViewController: UITableViewController {
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    // retrieve array from UserDefaults and reverse
-    searchedTerms = ((UserDefaults.standard.array(forKey: "searchedTerms") as? [String]))
     tableView.reloadData()
   }
   
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
     
-    // update UserDefaults
-    if (searchedTerms != nil) {
-      UserDefaults.standard.set(searchedTerms, forKey: "searchedTerms")
-    }
   }
   
   // MARK: - Table view data source
@@ -44,13 +37,12 @@ class SearchHistoryTableViewController: UITableViewController {
   }
   
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return searchedTerms?.count ?? 0
+    return RecentSearches.searches.count
   }
   
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "Searched Term Cell", for: indexPath)
-    let searchedTerm = searchedTerms?[indexPath.row]
-    cell.textLabel?.text = searchedTerm
+    cell.textLabel?.text = RecentSearches.searches[indexPath.row]
     return cell
   }
   
@@ -62,9 +54,7 @@ class SearchHistoryTableViewController: UITableViewController {
   override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
     if editingStyle == .delete {
       deleteTermIndexPath = indexPath
-      if let termToDelete = searchedTerms?[indexPath.row] {
-        confirmDelete(term: termToDelete)
-      }
+      confirmDelete(term: RecentSearches.searches[indexPath.row])
     }
   }
   
@@ -86,13 +76,10 @@ class SearchHistoryTableViewController: UITableViewController {
     if let indexPath = deleteTermIndexPath {
       tableView.beginUpdates()
       
-      searchedTerms?.remove(at: indexPath.row)
+       RecentSearches.remove(at: indexPath.row)
       
       // Note that indexPath is wrapped in an array:  [indexPath]
-      tableView.deleteRows(at: [indexPath], with: .automatic)
-      
-      // remove from UserDefaults
-      
+      tableView.deleteRows(at: [indexPath], with: .fade)
       
       deleteTermIndexPath = nil
       

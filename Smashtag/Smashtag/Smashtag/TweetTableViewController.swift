@@ -18,12 +18,16 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate {
   
   var searchText: String? {
     didSet {
+      guard let text = searchText, !text.isEmpty else {
+        return
+      }
       searchTextField?.text = searchText
       searchTextField?.resignFirstResponder() // keyboard
       lastTwitterRequest = nil
       tweets.removeAll()
       tableView.reloadData()
       searchForTweets()
+      RecentSearches.add(text)
       title = searchText
     }
   }
@@ -39,29 +43,6 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate {
   // that finds tweets that match our searchText
   private func twitteRequest() -> Twitter.Request? {
     if let query = searchText, !query.isEmpty {
-      
-      // Store latest 100 queries in UserDefaults
-      let defaults = UserDefaults.standard
-      var storedQuestionsAsked = defaults.array(forKey: "searchedTerms") as? [String] ?? [String]()
-      
-      func storeQueryToArray(_ query: String) {
-        let limit = 100
-        // ignore if array has hit its limit, or if the last element
-        // in the array is the same as the query
-        guard storedQuestionsAsked.count <= limit, query != storedQuestionsAsked.first  else { return }
-        
-        if storedQuestionsAsked.count == limit {
-          storedQuestionsAsked.removeFirst()
-        }
-        storedQuestionsAsked.insert(query, at: 0)
-      }
-      
-      // Store new query in array
-      storeQueryToArray(query)
-      
-      // update UserDefaults
-      defaults.set(storedQuestionsAsked, forKey: "searchedTerms")
-      
       return Twitter.Request(search: query, count: 100)
     }
     return nil
@@ -80,6 +61,7 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate {
   // (it will then call our UITableViewDataSource to get what it needs)
   private func searchForTweets() {
     if let request = lastTwitterRequest?.newer ?? twitteRequest() {
+      print("searchForTweeets")
       lastTwitterRequest = request
       request.fetchTweets {  [weak self] newTweets  in // this is off the main queue
         DispatchQueue.main.async { // so we must dispatch back to main queue
